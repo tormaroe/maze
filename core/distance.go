@@ -54,3 +54,37 @@ func (c *Cell) Distances() *Distance {
 
 	return &d
 }
+
+func (d Distance) PathToCell(goal *Cell) *Distance {
+	current := goal
+
+	breadcrumbs := NewDistance(d.root)
+	v, _ := d.distanceTo(current)
+	breadcrumbs.setDistanceTo(current, v)
+
+	for current != d.root {
+		for _, neighbor := range current.linkedCells() {
+			vn, _ := d.distanceTo(neighbor)
+			vc, _ := d.distanceTo(current)
+			if vn < vc {
+				breadcrumbs.setDistanceTo(neighbor, vn)
+				current = neighbor
+				break
+			}
+		}
+	}
+
+	return &breadcrumbs
+}
+
+func (d Distance) Max() (maxCell *Cell, maxDistance int) {
+	maxDistance = 0
+	maxCell = d.root
+	for cell, distance := range d.cellDists {
+		if distance > maxDistance {
+			maxCell = cell
+			maxDistance = distance
+		}
+	}
+	return
+}

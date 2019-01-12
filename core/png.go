@@ -4,8 +4,8 @@ import "github.com/fogleman/gg"
 
 func (g Grid) Png(path string) error {
 	cellSize := 5
-	imgWidth := cellSize * g.columns
-	imgHeight := cellSize * g.rows
+	imgWidth := cellSize * g.Columns
+	imgHeight := cellSize * g.Rows
 	dc := gg.NewContext(imgWidth+2, imgHeight+2)
 
 	dc.SetRGB(237, 234, 232)

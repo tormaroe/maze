@@ -23,10 +23,32 @@ func main() {
 	fmt.Print(grid)
 
 	fmt.Println("\nBinary Tree Maze with distances:")
+	rand.Seed(15302)
 	dg := core.NewGrid(6, 10)
 	dg.SidewinderMaze()
 	start := dg.CellAt(0, 0)
 	dg.Distances = start.Distances()
+	fmt.Print(dg)
+
+	fmt.Println("\nPath from northwest corner to southwest corner:")
+	rand.Seed(15302)
+	dg = core.NewGrid(6, 10)
+	dg.SidewinderMaze()
+	start = dg.CellAt(0, 0)
+	d := start.Distances()
+	dg.Distances = d.PathToCell(dg.CellAt(dg.Rows-1, 0))
+	fmt.Print(dg)
+
+	fmt.Println("\nLongest path:")
+	rand.Seed(15302)
+	dg = core.NewGrid(6, 10)
+	dg.SidewinderMaze()
+	start = dg.CellAt(0, 0)
+	distances := start.Distances()
+	newStart, _ := distances.Max()
+	newDistances := newStart.Distances()
+	goal, _ := newDistances.Max()
+	dg.Distances = newDistances.PathToCell(goal)
 	fmt.Print(dg)
 
 	path := "out" + strconv.FormatInt(rand.Int63(), 10) + ".png"

@@ -17,7 +17,7 @@ func (g Grid) contentsOfCell(c *Cell) string {
 func (g Grid) String() string {
 	var sb strings.Builder
 	sb.WriteString("+")
-	for i := 0; i < g.columns; i++ {
+	for i := 0; i < g.Columns; i++ {
 		sb.WriteString("---+")
 	}
 	sb.WriteString("\n")
