@@ -5,9 +5,10 @@ import (
 )
 
 type Grid struct {
-	rows    int
-	columns int
-	grid    [][]*Cell
+	rows      int
+	columns   int
+	grid      [][]*Cell
+	Distances *Distance
 }
 
 func NewGrid(rows, columns int) (g Grid) {
@@ -22,15 +23,15 @@ func NewGrid(rows, columns int) (g Grid) {
 	g.eachCell(func(c *Cell) {
 		row := c.row
 		col := c.column
-		c.north = g.cellAt(row-1, col)
-		c.south = g.cellAt(row+1, col)
-		c.west = g.cellAt(row, col-1)
-		c.east = g.cellAt(row, col+1)
+		c.north = g.CellAt(row-1, col)
+		c.south = g.CellAt(row+1, col)
+		c.west = g.CellAt(row, col-1)
+		c.east = g.CellAt(row, col+1)
 	})
 	return
 }
 
-func (g *Grid) cellAt(row, column int) *Cell {
+func (g *Grid) CellAt(row, column int) *Cell {
 	if row >= 0 && row < g.rows {
 		if column >= 0 && column < len(g.grid[row]) {
 			return g.grid[row][column]
@@ -42,7 +43,7 @@ func (g *Grid) cellAt(row, column int) *Cell {
 func (g *Grid) randomCell() *Cell {
 	row := rand.Intn(g.rows)
 	column := rand.Intn(len(g.grid[row]))
-	return g.cellAt(row, column)
+	return g.CellAt(row, column)
 }
 
 func (g Grid) size() int {
