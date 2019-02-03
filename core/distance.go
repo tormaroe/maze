@@ -3,6 +3,8 @@ package core
 type Distance struct {
 	root      *Cell
 	cellDists map[*Cell]int
+	maximum   int   // cache
+	farthest  *Cell // cache
 }
 
 func NewDistance(root *Cell) Distance {
@@ -77,14 +79,16 @@ func (d Distance) PathToCell(goal *Cell) *Distance {
 	return &breadcrumbs
 }
 
-func (d Distance) Max() (maxCell *Cell, maxDistance int) {
-	maxDistance = 0
-	maxCell = d.root
-	for cell, distance := range d.cellDists {
-		if distance > maxDistance {
-			maxCell = cell
-			maxDistance = distance
+func (d *Distance) Max() (*Cell, int) {
+	if d.farthest == nil {
+		d.maximum = 0
+		d.farthest = d.root
+		for cell, distance := range d.cellDists {
+			if distance > d.maximum {
+				d.farthest = cell
+				d.maximum = distance
+			}
 		}
 	}
-	return
+	return d.farthest, d.maximum
 }
