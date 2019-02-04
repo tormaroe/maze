@@ -48,6 +48,7 @@ Options:
 		fmt.Println("Avaliable algorithms are:")
 		fmt.Println("  * binarytree")
 		fmt.Println("  * sidewinder")
+		fmt.Println("  * aldousbroder")
 		return
 	}
 
@@ -83,6 +84,10 @@ Options:
 		break
 	case "binarytree":
 		grid.BinaryTreeMaze()
+		break
+	case "aldousbroder":
+		grid.AldousBroderMaze()
+		break
 	}
 
 	if longestPath {
