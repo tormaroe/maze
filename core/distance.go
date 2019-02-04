@@ -92,3 +92,12 @@ func (d *Distance) Max() (*Cell, int) {
 	}
 	return d.farthest, d.maximum
 }
+
+func (g Grid) LongestPath() *Distance {
+	start := g.CellAt(0, 0)
+	distances := start.Distances()
+	newStart, _ := distances.Max()
+	newDistances := newStart.Distances()
+	goal, _ := newDistances.Max()
+	return newDistances.PathToCell(goal)
+}

@@ -22,7 +22,7 @@ func main() {
 Usage:
   maze algorithms
   maze ascii <algorithm> [--width <n>] [--height <n>] [--seed <n>] [-vrl]
-  maze png <algorithm> [--out <path>] [--width <n>] [--height <n>] [--seed <n>] [-vrc]
+  maze png <algorithm> [--out <path>] [--width <n>] [--height <n>] [--seed <n>] [-vrlc]
   maze --help
 
 Options:
@@ -86,12 +86,7 @@ Options:
 	}
 
 	if longestPath {
-		start := grid.CellAt(0, 0)
-		distances := start.Distances()
-		newStart, _ := distances.Max()
-		newDistances := newStart.Distances()
-		goal, _ := newDistances.Max()
-		grid.Distances = newDistances.PathToCell(goal)
+		grid.Distances = grid.LongestPath()
 	}
 
 	if ascii {
@@ -110,6 +105,12 @@ Options:
 		}
 
 		grid.PngDrawWalls(dc)
+
+		if longestPath {
+			grid.Distances = grid.LongestPath()
+			grid.PngDotPath(dc)
+		}
+
 		if verbous {
 			fmt.Println("Writing", path)
 		}

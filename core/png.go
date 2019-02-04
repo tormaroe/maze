@@ -1,7 +1,6 @@
 package core
 
 import (
-	"fmt"
 	"image/color"
 	"math"
 
@@ -18,7 +17,7 @@ func (g Grid) backgroundColor(c *Cell) (float64, float64, float64) {
 		intensity := float64(maximum-distance) / float64(maximum)
 		dark := 255 - math.Round(254*intensity)
 		bright := 255 - math.Round(90*intensity)
-		return bright, dark, dark
+		return bright, dark, bright
 	}
 	return 255, 255, 255
 }
@@ -76,9 +75,25 @@ func (g Grid) PngColorizeCells(dc *gg.Context) {
 	g.eachCell(func(c *Cell) {
 		x1, y1, x2, y2 := c.dimensions()
 		r, g, b := g.backgroundColor(c)
-		fmt.Printf("Color for cell %d %d - R:%f G:%f B:%f\n", c.row, c.column, r, g, b)
 		dc.SetRGB(r, g, b)
 		dc.DrawRectangle(x1, y1, x2-x1, y2-y1)
 		dc.Fill()
+	})
+}
+
+func (g Grid) PngDotPath(dc *gg.Context) {
+	if g.Distances == nil {
+		return
+	}
+	dc.SetRGB(10, 250, 250)
+	g.eachCell(func(c *Cell) {
+		if _, found := g.Distances.distanceTo(c); found {
+			x1, y1, x2, y2 := c.dimensions()
+			centerX := x2 - ((x2 - x1) / 2)
+			centerY := y2 - ((y2 - y1) / 2)
+			dc.DrawCircle(centerX, centerY, 2.5)
+			dc.Fill()
+
+		}
 	})
 }
