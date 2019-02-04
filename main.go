@@ -94,8 +94,17 @@ Options:
 		break
 	}
 
+	if verbous {
+		fmt.Printf("Deadend count: %d\n", grid.DeadendsCount())
+	}
+
 	if longestPath {
 		grid.Distances = grid.LongestPath()
+
+		if verbous {
+			_, pathLength := grid.Distances.Max()
+			fmt.Printf("Longest path: %d\n", pathLength)
+		}
 	}
 
 	if ascii {

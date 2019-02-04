@@ -63,3 +63,13 @@ func (g *Grid) eachCell(fn func(*Cell)) {
 		}
 	})
 }
+
+func (g *Grid) DeadendsCount() int {
+	count := 0
+	g.eachCell(func(c *Cell) {
+		if len(c.links) == 1 {
+			count++
+		}
+	})
+	return count
+}
