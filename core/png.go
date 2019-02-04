@@ -1,6 +1,7 @@
 package core
 
 import (
+	"fmt"
 	"image/color"
 	"math"
 
@@ -10,16 +11,16 @@ import (
 const CellSize = 10
 const WallThickness = 2.0
 
-func (g Grid) backgroundColor(c *Cell) (int, int, int) {
+func (g Grid) backgroundColor(c *Cell) (float64, float64, float64) {
 	distance, found := g.Distances.distanceTo(c)
 	if found {
 		_, maximum := g.Distances.Max()
 		intensity := float64(maximum-distance) / float64(maximum)
-		dark := math.Round(255 * intensity)
-		bright := 128 + math.Round(127*intensity)
-		return int(dark), int(bright), int(dark)
+		dark := 255 - math.Round(254*intensity)
+		bright := 255 - math.Round(90*intensity)
+		return bright, dark, dark
 	}
-	return 0, 0, 0
+	return 255, 255, 255
 }
 
 func (g Grid) PngNewContext() *gg.Context {
@@ -35,15 +36,20 @@ func SetBackground(ctx *gg.Context, r, g, b float64) {
 	ctx.Fill()
 }
 
+func (c Cell) dimensions() (x1, y1, x2, y2 float64) {
+	x1 = float64(c.column*CellSize + 1)
+	y1 = float64(c.row*CellSize + 1)
+	x2 = float64((c.column+1)*CellSize + 1)
+	y2 = float64((c.row+1)*CellSize + 1)
+	return
+}
+
 func (g Grid) PngDrawWalls(dc *gg.Context) {
 	dc.SetLineWidth(WallThickness)
 	dc.SetColor(color.Black)
 
 	g.eachCell(func(c *Cell) {
-		x1 := float64(c.column*CellSize + 1)
-		y1 := float64(c.row*CellSize + 1)
-		x2 := float64((c.column+1)*CellSize + 1)
-		y2 := float64((c.row+1)*CellSize + 1)
+		x1, y1, x2, y2 := c.dimensions()
 
 		if c.north == nil {
 			dc.DrawLine(x1, y1, x2, y1)
@@ -64,4 +70,15 @@ func (g Grid) PngDrawWalls(dc *gg.Context) {
 	})
 
 	return
+}
+
+func (g Grid) PngColorizeCells(dc *gg.Context) {
+	g.eachCell(func(c *Cell) {
+		x1, y1, x2, y2 := c.dimensions()
+		r, g, b := g.backgroundColor(c)
+		fmt.Printf("Color for cell %d %d - R:%f G:%f B:%f\n", c.row, c.column, r, g, b)
+		dc.SetRGB(r, g, b)
+		dc.DrawRectangle(x1, y1, x2-x1, y2-y1)
+		dc.Fill()
+	})
 }
