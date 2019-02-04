@@ -49,6 +49,7 @@ Options:
 		fmt.Println("  * binarytree")
 		fmt.Println("  * sidewinder")
 		fmt.Println("  * aldousbroder")
+		fmt.Println("  * huntandkill")
 		return
 	}
 
@@ -87,6 +88,9 @@ Options:
 		break
 	case "aldousbroder":
 		grid.AldousBroderMaze()
+		break
+	case "huntandkill":
+		grid.HuntAndKillMaze()
 		break
 	}
 
